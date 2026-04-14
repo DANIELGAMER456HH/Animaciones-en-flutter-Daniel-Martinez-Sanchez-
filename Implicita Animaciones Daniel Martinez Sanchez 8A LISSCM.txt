@@ -1,0 +1,63 @@
+import 'package:flutter/material.dart'; // EXPLICACION DANIEL MARTINEZ: Importamos material.dart para usar los widgets base de diseño de Flutter.
+
+class ImplicitaAnimationExample extends StatefulWidget {
+  // EXPLICACION DANIEL MARTINEZ: Usamos StatefulWidget porque la pantalla tendrá movimiento y cambios de estado.
+  const ImplicitaAnimationExample({
+    super.key,
+  }); // EXPLICACION DANIEL MARTINEZ: Definimos el constructor pasando el key para la gestión interna del árbol de Flutter.
+
+  @override
+  ImplicitaAnimationExampleState createState() =>
+      ImplicitaAnimationExampleState(); // EXPLICACION DANIEL MARTINEZ: Creamos y enlazamos el estado asociado a este widget para manejar la interactividad.
+}
+
+class ImplicitaAnimationExampleState extends State<ImplicitaAnimationExample> {
+  // EXPLICACION DANIEL MARTINEZ: En esta clase administramos las variables que, al cambiar, actualizarán nuestra interfaz.
+  bool _big =
+      false; // EXPLICACION DANIEL MARTINEZ: Esta variable booleana será la llave maestra que controle si el cuadro es grande o pequeño.
+
+  @override
+  Widget build(BuildContext context) {
+    // EXPLICACION DANIEL MARTINEZ: El método build construye y dibuja todos los elementos visuales que el usuario verá en la pantalla.
+    return Scaffold(
+      // EXPLICACION DANIEL MARTINEZ: Scaffold es nuestro lienzo principal que nos da la estructura base de la app, como la barra y el cuerpo.
+      appBar: AppBar(title: Text('Animacion implicita')),
+      body: Center(
+        // EXPLICACION DANIEL MARTINEZ: Usamos el widget Center para que todo nuestro bloque animado quede perfectamente en el medio.
+        child: GestureDetector(
+          // EXPLICACION DANIEL MARTINEZ: GestureDetector nos permite atrapar la interacción física del usuario, en este caso, un toque.
+          onTap: () {
+            setState(() {
+              // EXPLICACION DANIEL MARTINEZ: setState es fundamental porque le grita a Flutter que debe redibujar la pantalla con los nuevos datos.
+              _big =
+                  !_big; // EXPLICACION DANIEL MARTINEZ: Invertimos el valor de la variable: de falso a verdadero y viceversa cada vez que se toca.
+            });
+          },
+          child: AnimatedContainer(
+            // EXPLICACION DANIEL MARTINEZ: AnimatedContainer es el widget estrella que hace la transición fluida de sus propiedades automáticamente.
+            duration: Duration(
+              seconds: 1,
+            ), // EXPLICACION DANIEL MARTINEZ: Le indicamos al contenedor que su transformación debe durar exactamente 1 segundo para verse suave.
+            curve: Curves.easeInOut,
+            width: _big ? 200 : 100,
+            height: _big ? 200 : 100,
+            color: _big ? Colors.blue : Colors.orange,
+            child: Center(
+              child: Text('Toca aqui', style: TextStyle(color: Colors.white)),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+

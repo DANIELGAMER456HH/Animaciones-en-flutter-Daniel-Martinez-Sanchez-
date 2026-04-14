@@ -1,0 +1,97 @@
+import 'package:flutter/material.dart'; // EXPLICACION DANIEL MARTINEZ SANCHEZ: Arrancamos importando material.dart para acceder a todos los widgets fundamentales de Flutter.
+
+class ExplicitAnimationScreen extends StatefulWidget {
+  // EXPLICACION DANIEL MARTINEZ SANCHEZ: Creamos un StatefulWidget porque nuestra pantalla manejará una animación explícita interactiva que cambiará de tamaño.
+  const ExplicitAnimationScreen({super.key});
+
+  @override
+  State<ExplicitAnimationScreen> createState() =>
+      _ExplicitAnimationScreenState();
+}
+
+class _ExplicitAnimationScreenState extends State<ExplicitAnimationScreen>
+    with SingleTickerProviderStateMixin {
+  // EXPLICACION DANIEL MARTINEZ SANCHEZ: Usamos el SingleTickerProviderStateMixin, súper clave para sincronizar el AnimationController con los frames y no gastar batería.
+
+  late AnimationController
+  _controller; // EXPLICACION DANIEL MARTINEZ SANCHEZ: Declaramos el AnimationController, que será el motor principal para dictar la duración y dirección de la animación.
+  late Animation<double>
+  _sizeAnimation; // EXPLICACION DANIEL MARTINEZ SANCHEZ: Definimos nuestro objeto Animation, en este caso _sizeAnimation, encargado de calcular los valores del tamaño.
+
+  bool _isExpanded =
+      false; // EXPLICACION DANIEL MARTINEZ SANCHEZ: Inicializamos la bandera booleana _isExpanded en falso para saber en qué estado de tamaño se encuentra nuestro contenedor.
+
+  @override
+  void initState() {
+    // EXPLICACION DANIEL MARTINEZ SANCHEZ: Dentro del método initState es donde preparamos y configuramos nuestra animación antes de que la pantalla se dibuje por primera vez.
+    super.initState();
+
+    _controller = AnimationController(
+      // EXPLICACION DANIEL MARTINEZ SANCHEZ: Inicializamos el motor de la animación dándole una duración exacta de 2 segundos de transición.
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+
+    // Le puse 100 de inicio para que el botón sea visible y se pueda tocar.
+    _sizeAnimation = Tween<double>(begin: 100, end: 300).animate(
+      _controller,
+    ); // EXPLICACION DANIEL MARTINEZ SANCHEZ: Usamos un Tween para interpolar los valores, indicando que el contenedor crecerá desde 100 hasta 300 pixeles impulsado por el controlador.
+  }
+
+  @override
+  void dispose() {
+    // EXPLICACION DANIEL MARTINEZ SANCHEZ: Como siempre chavos, destruimos el controlador en el dispose para liberar la memoria y evitar fugas en la aplicación.
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _toggleAnimation() {
+    // EXPLICACION DANIEL MARTINEZ SANCHEZ: Creamos la función _toggleAnimation que decidirá si la animación avanza o retrocede dependiendo del estado actual.
+    if (_isExpanded) {
+      // EXPLICACION DANIEL MARTINEZ SANCHEZ: Si ya está expandido, llamamos a reverse() para achicarlo; si no, llamamos a forward() para que crezca.
+      _controller.reverse();
+    } else {
+      _controller.forward();
+    }
+
+    _isExpanded =
+        !_isExpanded; // EXPLICACION DANIEL MARTINEZ SANCHEZ: Invertimos el valor de la variable _isExpanded para que el próximo toque haga exactamente lo contrario.
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // EXPLICACION DANIEL MARTINEZ SANCHEZ: En el build retornamos un Scaffold con su AppBar, preparando nuestro lienzo principal para la vista.
+    return Scaffold(
+      appBar: AppBar(title: const Text('Animacion Explicita')),
+      body: Center(
+        child: GestureDetector(
+          // EXPLICACION DANIEL MARTINEZ SANCHEZ: Usamos GestureDetector y le pasamos nuestra función _toggleAnimation al onTap para atrapar los toques físicos del usuario.
+          onTap: _toggleAnimation,
+          child: AnimatedBuilder(
+            // EXPLICACION DANIEL MARTINEZ SANCHEZ: Metemos el AnimatedBuilder para que escuche _sizeAnimation y redibuje fluidamente el Container con sus nuevos valores de tamaño.
+            animation: _sizeAnimation,
+            builder: (context, child) {
+              return Container(
+                width: _sizeAnimation.value,
+                height: _sizeAnimation.value,
+                color: Colors.purple,
+                child: const Center(
+                  child: Text(
+                    'Toca aqui',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+

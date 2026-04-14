@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart'; // EXPLICACION DANIEL MARTINEZ SANCHEZ: Arrancamos importando material.dart, que es la caja de herramientas principal de diseño visual en Flutter.
+import 'Animaciones/Implicitas_screen/implicita_animation_example.dart';
+import 'Animaciones/Explicitas_screen/explicita_animation_example.dart';
+
+void main() {
+  // EXPLICACION DANIEL MARTINEZ SANCHEZ: Esta es la función main, el punto de entrada absoluto donde arranca toda la magia de nuestra aplicación.
+  runApp(
+    const AnimacionesApp(),
+  ); // EXPLICACION DANIEL MARTINEZ SANCHEZ: Con runApp le ordenamos a Flutter que tome nuestro widget principal y lo construya en la pantalla.
+}
+
+class AnimacionesApp extends StatelessWidget {
+  // EXPLICACION DANIEL MARTINEZ SANCHEZ: Creamos un StatelessWidget para la raíz de la app porque la configuración global no necesita cambiar de estado.
+  const AnimacionesApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      // EXPLICACION DANIEL MARTINEZ SANCHEZ: Retornamos MaterialApp, el widget maestro que nos da envoltura, navegación y el estilo visual base de Android.
+      title: 'Demo de Animaciones',
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
+      ), // EXPLICACION DANIEL MARTINEZ SANCHEZ: Definimos el tema global, poniéndole un color índigo bien elegante a nuestra interfaz para que resalte.
+      home: const HomeScreen(),
+      debugShowCheckedModeBanner:
+          false, // EXPLICACION DANIEL MARTINEZ SANCHEZ: Apagamos la etiqueta rojita de "debug" en la esquina para que nuestra app se vea súper limpia y profesional.
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  // EXPLICACION DANIEL MARTINEZ SANCHEZ: Este es nuestro HomeScreen, la pantalla principal inicial que va a contener nuestro menú de botones.
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Animaciones en Flutter')),
+      body: Center(
+        child: Column(
+          // EXPLICACION DANIEL MARTINEZ SANCHEZ: Usamos un widget Column, que es buenísimo para apilar nuestros botones uno debajo del otro de forma ordenada.
+          mainAxisAlignment: MainAxisAlignment
+              .center, // EXPLICACION DANIEL MARTINEZ SANCHEZ: Con esta propiedad centramos verticalmente todos los hijos de la columna para que todo quede bien balanceado.
+          children: [
+            ElevatedButton(
+              child: const Text('Animación Implícita'),
+              onPressed: () {
+                Navigator.push(
+                  // EXPLICACION DANIEL MARTINEZ SANCHEZ: El Navigator.push es clave, chavos, nos sirve para empujar una nueva ruta y saltar a la pantalla de animación.
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ImplicitaAnimationExample(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ), // EXPLICACION DANIEL MARTINEZ SANCHEZ: Metemos un SizedBox de 20 píxeles simplemente para darle un respiro y separar visualmente nuestros dos botones.
+            ElevatedButton(
+              child: const Text('Animación Explícita'),
+              onPressed: () {
+                Navigator.push(
+                  // EXPLICACION DANIEL MARTINEZ SANCHEZ: Aquí saltamos a nuestra nueva pantalla de animación explícita llamando a la clase correcta que creamos en el otro archivo.
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ExplicitAnimationScreen(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+
